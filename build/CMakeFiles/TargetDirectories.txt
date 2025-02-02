@@ -1,0 +1,3 @@
+/Users/maxfu/Desktop/Code/System Programming/mxsh/build/CMakeFiles/shell.dir
+/Users/maxfu/Desktop/Code/System Programming/mxsh/build/CMakeFiles/edit_cache.dir
+/Users/maxfu/Desktop/Code/System Programming/mxsh/build/CMakeFiles/rebuild_cache.dir

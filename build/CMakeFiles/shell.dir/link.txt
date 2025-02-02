@@ -1,0 +1,1 @@
+/Library/Developer/CommandLineTools/usr/bin/cc  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/shell.dir/src/main.c.o CMakeFiles/shell.dir/src/sh_init.c.o CMakeFiles/shell.dir/src/sh_inter.c.o CMakeFiles/shell.dir/src/sh_term.c.o CMakeFiles/shell.dir/sh_inter.c.o -o shell
