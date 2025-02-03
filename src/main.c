@@ -2,10 +2,11 @@
 #include <unistd.h>
 #include "sh_init.c"
 #include "sh_inter.c"
+#include "sh_term.c"
 
-int main(int argc, char **argv) {
+int main() {
     
-    sh_run();
-
+    sh_loop();
+    
     return 0;
 }
