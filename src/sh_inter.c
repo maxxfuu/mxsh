@@ -1,9 +1,10 @@
 #include "../header/sh_inter.h"
 #include <stdio.h>
+#include <string.h>
 #include <errno.h>
 
 #define SH_READ_BUFFER 32
-
+#define SH_DELIMITER " \t\r\n\a"
 // Read
 char *sh_read_line(void)
 {
@@ -24,18 +25,33 @@ char *sh_read_line(void)
 
 char **sh_split_lint(char *line)
 {
-    int buffer = SH_READ_BUFFER;
+    int buffer_size = SH_READ_BUFFER;
     int position = 0;
-    char **tokens = malloc(sizeof(char*) * buffer);
+    char **tokens = malloc(sizeof(char*) * buffer_size);
     char *token;
 
-    if (!token) {
-        fprintf(stderr, "mxsh: alocation failed");
+    if (!tokens) {
+        fprintf(stderr, "mxsh: allocation failed");
         exit(EXIT_FAILURE);
     }
 
-    token 
+    token = strtok(line, SH_DELIMITER);
+    while (token != NULL) {
+        tokens[position] = token;
+        position++;
 
+        if (position > buffer_size) {
+            buffer_size *= 2;
+            tokens = realloc(tokens, buffer_size);
+            if (!token) {
+                fprintf(stderr, "mxsh: realloaction failed");
+                exit(EXIT_FAILURE);
+            }
+        }
+        token = strtok(NULL, SH_DELIMITER);
+    }
+    tokens[position] = NULL;
+    return tokens;
 };
 
 
@@ -55,6 +71,10 @@ void sh_loop(void)
         line = sh_read_line();
         args = sh_split_lint(line);
         status = sh_execute(args);
+
     } while(1); {
     }
+
+    free(line);
+    free(args);
 }
