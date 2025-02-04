@@ -1,11 +1,14 @@
 #include "../header/sh_inter.h"
 #include <stdio.h>
+#include <unistd.h>
 #include <string.h>
 #include <errno.h>
+#include <stdlib.h>
+#include <sys/types.h>
 
 #define SH_READ_BUFFER 32
 #define SH_DELIMITER " \t\r\n\a"
-// Read
+
 char *sh_read_line(void)
 {
     char *line = NULL;
@@ -13,13 +16,12 @@ char *sh_read_line(void)
 
     if (getline(&line, &len, stdin) == -1) {
         if (feof(stdin)) {
-            exit(1);
+            exit(EXIT_FAILURE);
         }
     } else {
         perror("readline");
         exit(EXIT_FAILURE);
     }
-    
     return line;
 }
 
@@ -55,9 +57,27 @@ char **sh_split_lint(char *line)
 };
 
 
-/*
-int sh_execute(char **args) {};
-*/
+int sh_execute(char **args)
+{
+    int status;
+    pid_t process_id;
+    process_id = fork();
+    
+    if (process_id == 0) { // child process
+        printf("Child Process%d\n", process_id);
+        if (execvp(args[0], args) == -1) { // execute a new program via vector path
+            perror("Failed to execute new program.");
+        }
+    } else if (process_id < 0) {
+        perror("error creating new process: fork");
+        return EXIT_FAILURE;
+    } else { // parent process
+        do {
+            waitpid(process_id, &status, WUNTRACED);
+        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+    }
+    return 1;
+};
 
 
 void sh_loop(void)
@@ -72,7 +92,7 @@ void sh_loop(void)
         args = sh_split_lint(line);
         status = sh_execute(args);
 
-    } while(1); {
+    } while(status); {
     }
 
     free(line);
