@@ -4,7 +4,7 @@
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <sys/types.h>
+#include <sys/wait.h>
 
 #define SH_READ_BUFFER 32
 #define SH_DELIMITER " \t\r\n\a"
